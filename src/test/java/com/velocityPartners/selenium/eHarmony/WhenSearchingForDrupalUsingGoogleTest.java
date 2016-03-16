@@ -27,7 +27,7 @@ public class WhenSearchingForDrupalUsingGoogleTest {
 	private static WebDriver driver;
 	private static WebElement searchField;
 	private ScreenshotHelper screenshotHelper;
-	private Queries queries; 
+	private Locators locators; 
 	
 	@BeforeClass
 	public static void openBrowser() {
@@ -46,7 +46,7 @@ public class WhenSearchingForDrupalUsingGoogleTest {
 	@Before
 	public void setup() {
 	    screenshotHelper = new ScreenshotHelper();
-	    queries = new Queries(driver);
+	    locators = new Locators(driver);
 	}
 	
 	@AfterClass
@@ -75,18 +75,10 @@ public class WhenSearchingForDrupalUsingGoogleTest {
 	@Test //http://www.seleniumhq.org/
 	public void pageLinksAfterSearchShouldContaintSelenium()  {
 		assertTrue("The links should be conatint the string 'selenium'",
-		  (new WebDriverWait(driver, 10)).until(new ExpectedCondition<Boolean>() {
-			  public Boolean apply(WebDriver d) {
-				  return d.findElement(By.cssSelector("h3.r > a:link"))
-						  .getAttribute("href").contains("selenium");
-			  }
-		}));
-		
-		System.out.println( queries.getLink() );
+		  locators.getFirstLink().getAttribute("href").contains("selenium"));
 	}
 	
 	private class ScreenshotHelper {
-
 		public void saveScreenshot(String screenshotFileName)
 				throws IOException {
 			File screenshot = ((TakesScreenshot) driver)
