@@ -8,16 +8,24 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Locators {
 	private WebDriver driver;
-	private static final String linksToSelenium = "h3.r > a:link";
+	
 	
 	public Locators(WebDriver driver) {
 		this.driver = driver;
 	}
 	
-	public WebElement getFirstLink() {
+	public WebElement getElementByCss(String linksToSelenium) {
 		return (new WebDriverWait(driver, 10)).until(new ExpectedCondition<WebElement>() {
 		  public WebElement apply(WebDriver d) {
 			  return d.findElement(By.cssSelector(linksToSelenium));
+		  }
+		});
+	}
+	
+	public String getTitlePage() {
+		return (new WebDriverWait(driver, 10)).until(new ExpectedCondition<String>() {
+		  public String apply(WebDriver d) {
+			  return d.getTitle();
 		  }
 		});
 	}

@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -19,6 +21,8 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -27,19 +31,31 @@ public class WhenSearchingForDrupalUsingGoogleTest {
 	private static WebDriver driver;
 	private static WebElement searchField;
 	private ScreenshotHelper screenshotHelper;
-	private Locators locators; 
+	private Locators locators;
+	
+	private static final String linksToSelenium = "h3.r > a:link";
+	private static final String SELENIUM = "selenium";
+	private static final String HREF = "href";
 	
 	@BeforeClass
 	public static void openBrowser() {
 		System.setProperty("webdriver.chrome.driver", "/Users/luillyfe/chromedriver");
 		
+		ChromeOptions options = new ChromeOptions();
+		DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+		List<String> list = new ArrayList<String>();
+        list.add("disable-component-update");
+        options.setExperimentalOption("excludeSwitches", list);
+        options.addArguments("user-data-dir=/Users/luillyfe/Library/Application Support/Google/Chrome/Profile 1");
+        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+		
 		baseUrl = System.getProperty("webdriver.base.url")!=null ? 
 		  System.getProperty("webdriver.base.url") : "http://www.google.com/";
-		driver = new ChromeDriver();
+		driver = new ChromeDriver(capabilities);
 		driver.get(baseUrl);
 		
 		searchField = driver.findElement(By.name("q"));
-		searchField.sendKeys("Selenium");
+		searchField.sendKeys(SELENIUM);
 		searchField.submit();
 	}
 	
@@ -64,18 +80,14 @@ public class WhenSearchingForDrupalUsingGoogleTest {
 		assertEquals("The page title should equal Google at the start of the test.",
 		  "Selenium - Buscar con Google", driver.getTitle());
 		
-		assertTrue("The page title should start with the search string after the search.",
-		  (new WebDriverWait(driver, 10)).until(new ExpectedCondition<Boolean>() {
-		    public Boolean apply(WebDriver d) {
-		      return d.getTitle().toLowerCase().startsWith("selenium");
-		    }
-		}));
+		assertTrue("The page title should start with the search string after the search.", 
+			locators.getTitlePage().toLowerCase().startsWith(SELENIUM));
 	}
 	
 	@Test //http://www.seleniumhq.org/
 	public void pageLinksAfterSearchShouldContaintSelenium()  {
 		assertTrue("The links should be conatint the string 'selenium'",
-		  locators.getFirstLink().getAttribute("href").contains("selenium"));
+		  locators.getElementByCss(linksToSelenium).getAttribute(HREF).contains(SELENIUM));
 	}
 	
 	private class ScreenshotHelper {
