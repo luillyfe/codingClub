@@ -41,17 +41,9 @@ public class WhenSearchingForDrupalUsingGoogleTest {
 	public static void openBrowser() {
 		System.setProperty("webdriver.chrome.driver", "/Users/luillyfe/chromedriver");
 		
-		ChromeOptions options = new ChromeOptions();
-		DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-		List<String> list = new ArrayList<String>();
-        list.add("disable-component-update");
-        options.setExperimentalOption("excludeSwitches", list);
-        options.addArguments("user-data-dir=/Users/luillyfe/Library/Application Support/Google/Chrome/Profile 1");
-        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-		
 		baseUrl = System.getProperty("webdriver.base.url")!=null ? 
 		  System.getProperty("webdriver.base.url") : "http://www.google.com/";
-		driver = new ChromeDriver(capabilities);
+		driver = new ChromeDriver();
 		driver.get(baseUrl);
 		
 		searchField = driver.findElement(By.name("q"));
@@ -78,7 +70,7 @@ public class WhenSearchingForDrupalUsingGoogleTest {
 	@Test
 	public void pageTitleAfterSearchShouldBeginWithSelenium() throws IOException {
 		assertEquals("The page title should equal Google at the start of the test.",
-		  "Selenium - Buscar con Google", driver.getTitle());
+		  "selenium - Buscar con Google", driver.getTitle());
 		
 		assertTrue("The page title should start with the search string after the search.", 
 			locators.getTitlePage().toLowerCase().startsWith(SELENIUM));

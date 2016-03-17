@@ -1,5 +1,7 @@
 package com.velocityPartners.selenium.eHarmony;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,10 +16,18 @@ public class Locators {
 		this.driver = driver;
 	}
 	
-	public WebElement getElementByCss(String linksToSelenium) {
+	public WebElement getElementByCss(String selector) {
 		return (new WebDriverWait(driver, 10)).until(new ExpectedCondition<WebElement>() {
 		  public WebElement apply(WebDriver d) {
-			  return d.findElement(By.cssSelector(linksToSelenium));
+			  return d.findElement(By.cssSelector(selector));
+		  }
+		});
+	}
+	
+	public int getElementsSize(String selector) {
+		return (new WebDriverWait(driver, 10)).until(new ExpectedCondition<Integer>() {
+		  public Integer apply(WebDriver d) {
+			  return d.findElements(By.cssSelector(selector)).toArray().length;
 		  }
 		});
 	}
