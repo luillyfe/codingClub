@@ -18,24 +18,24 @@ public class Locators {
 	
 	public WebElement getElementByCss(String selector) {
 		return (new WebDriverWait(driver, 10)).until(new ExpectedCondition<WebElement>() {
-		  public WebElement apply(WebDriver d) {
-			  return d.findElement(By.cssSelector(selector));
+		  public WebElement apply(WebDriver driver) {
+			  return driver.findElement(By.cssSelector(selector));
 		  }
 		});
 	}
 	
-	public int getElementsSize(String selector) {
-		return (new WebDriverWait(driver, 10)).until(new ExpectedCondition<Integer>() {
-		  public Integer apply(WebDriver d) {
-			  return d.findElements(By.cssSelector(selector)).toArray().length;
+	public List<WebElement> getElementsByCss(String selector) {
+		return (new WebDriverWait(driver, 10)).until(new ExpectedCondition<List<WebElement>>() {
+		  public List<WebElement> apply(WebDriver driver) {
+			  return driver.findElements(By.cssSelector(selector));
 		  }
 		});
 	}
 	
 	public String getTitlePage() {
 		return (new WebDriverWait(driver, 10)).until(new ExpectedCondition<String>() {
-		  public String apply(WebDriver d) {
-			  return d.getTitle();
+		  public String apply(WebDriver driver) {
+			  return driver.getTitle();
 		  }
 		});
 	}
